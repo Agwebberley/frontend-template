@@ -2,29 +2,29 @@
 import * as React from 'react';
 import { List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm, TextInput, NumberInput, DateInput, Create, TabbedForm, FormTab, ReferenceInput, SelectInput, ArrayInput, SimpleFormIterator } from 'react-admin';
 
-export const OrdersList = props => (
+export const OrderList = props => (
     <List {...props}>
         <Datagrid>
             <TextField source="id" />
-<TextField source="customer_id" reference="customers" />
+<TextField source="customer_id" reference="customer" />
 <TextField source="order_date" />
 <TextField source="total_amount" />
 <TextField source="status" />
 <TextField source="created_at" />
 <TextField source="updated_at" />
-            <EditButton basePath="/orders" />
-            <DeleteButton basePath="/orders" />
+            <EditButton basePath="/order" />
+            <DeleteButton basePath="/order" />
         </Datagrid>
     </List>
 );
 
-export const OrdersEdit = props => (
+export const OrderEdit = props => (
     <Edit {...props}>
         <TabbedForm>
             <FormTab label="Details">
                 <TextInput source="id" disabled />
 
-        <ReferenceInput source="customer_id" reference="customers">
+        <ReferenceInput source="customer_id" reference="customer">
             <SelectInput optionText="id" />
         </ReferenceInput>
 <TextInput source="order_date" />
@@ -34,15 +34,15 @@ export const OrdersEdit = props => (
 <TextInput source="updated_at" disabled />
             </FormTab>
             
-    <ArrayInput source="order_items">
+    <ArrayInput source="order_item">
         <SimpleFormIterator>
             <TextInput source="id" disabled />
 
-        <ReferenceInput source="order_id" reference="orders">
+        <ReferenceInput source="order_id" reference="order">
             <SelectInput optionText="id" />
         </ReferenceInput>
 
-        <ReferenceInput source="part_id" reference="parts">
+        <ReferenceInput source="part_id" reference="part">
             <SelectInput optionText="id" />
         </ReferenceInput>
 <NumberInput source="quantity" />
@@ -55,12 +55,12 @@ export const OrdersEdit = props => (
     </Edit>
 );
 
-export const OrdersCreate = props => (
+export const OrderCreate = props => (
     <Create {...props}>
         <SimpleForm>
             <TextInput source="id" disabled />
 
-        <ReferenceInput source="customer_id" reference="customers">
+        <ReferenceInput source="customer_id" reference="customer">
             <SelectInput optionText="id" />
         </ReferenceInput>
 <TextInput source="order_date" />
@@ -69,15 +69,15 @@ export const OrdersCreate = props => (
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
             
-    <ArrayInput source="order_items">
+    <ArrayInput source="order_item">
         <SimpleFormIterator>
             <TextInput source="id" disabled />
 
-        <ReferenceInput source="order_id" reference="orders">
+        <ReferenceInput source="order_id" reference="order">
             <SelectInput optionText="id" />
         </ReferenceInput>
 
-        <ReferenceInput source="part_id" reference="parts">
+        <ReferenceInput source="part_id" reference="part">
             <SelectInput optionText="id" />
         </ReferenceInput>
 <NumberInput source="quantity" />

@@ -2,8 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 const resources = [
+    // Define your resources here
     {
-        name: 'customers',
+        name: 'customer',
         fields: [
             { name: 'id', type: 'number', editable: false },
             { name: 'name', type: 'string' },
@@ -14,7 +15,7 @@ const resources = [
         ]
     },
     {
-        name: 'parts',
+        name: 'part',
         fields: [
             { name: 'id', type: 'number', editable: false },
             { name: 'name', type: 'string' },
@@ -26,10 +27,10 @@ const resources = [
         ]
     },
     {
-        name: 'orders',
+        name: 'order',
         fields: [
             { name: 'id', type: 'number', editable: false },
-            { name: 'customer_id', type: 'reference', reference: 'customers' },
+            { name: 'customer_id', type: 'reference', reference: 'customer' },
             { name: 'order_date', type: 'date' },
             { name: 'total_amount', type: 'number' },
             { name: 'status', type: 'string' },
@@ -38,11 +39,11 @@ const resources = [
         ],
         nested: [
             {
-                name: 'order_items',
+                name: 'order_item',
                 fields: [
                     { name: 'id', type: 'number', editable: false },
-                    { name: 'order_id', type: 'reference', reference: 'orders' },
-                    { name: 'part_id', type: 'reference', reference: 'parts' },
+                    { name: 'order_id', type: 'reference', reference: 'order' },
+                    { name: 'part_id', type: 'reference', reference: 'part' },
                     { name: 'quantity', type: 'number' },
                     { name: 'unit_price', type: 'number' },
                     { name: 'created_at', type: 'date', editable: false },
@@ -51,20 +52,7 @@ const resources = [
             }
         ]
     },
-    {
-        name: 'order_items',
-        fields: [
-            { name: 'id', type: 'number', editable: false },
-            { name: 'order_id', type: 'reference', reference: 'orders' },
-            { name: 'part_id', type: 'reference', reference: 'parts' },
-            { name: 'quantity', type: 'number' },
-            { name: 'unit_price', type: 'number' },
-            { name: 'created_at', type: 'date', editable: false },
-            { name: 'updated_at', type: 'date', editable: false }
-        ]
-    }
 ];
-
 
 const generateFormField = (field) => {
     if (field.type === 'reference') {

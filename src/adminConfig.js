@@ -1,23 +1,61 @@
-import * as React from 'react';
-import { Admin, Resource } from 'react-admin';
+import { CustomerList, CustomerEdit, CustomerCreate } from './components/customer';
+import { PartList, PartEdit, PartCreate } from './components/part';
+import { OrderList, OrderEdit, OrderCreate } from './components/order';
+import { fetchUtils, Admin, Resource } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
-import { createBrowserHistory as createHistory } from 'history';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import { CustomersList, CustomersEdit, CustomersCreate } from './components/customers';
-import { PartsList, PartsEdit, PartsCreate } from './components/parts';
-import { OrdersList, OrdersEdit, OrdersCreate } from './components/orders';
-import { OrderItemsList, OrderItemsEdit, OrderItemsCreate } from './components/order_items';
+const getCookie = (name) => {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
-const dataProvider = simpleRestProvider('http://localhost:8000/api'); // Adjust URL to your Django REST API
-const history = createHistory();
+const httpClient = async (url, options = {}) => {
+    if (!url.endsWith('/')) {
+        url += '/';
+    }
+    options.headers = new Headers({ Accept: 'application/json' });
+    if (options.method === "POST") {
+        options.headers.append('X-CSRFToken', getCookie('csrftoken'));
+    }
+    const response = await fetchUtils.fetchJson(url, options);
+    const { headers, json } = response;
+    return { headers, json };
+};
+
+const dataProvider = simpleRestProvider('/api', httpClient);
+
+const myDataProvider = {
+    ...dataProvider,
+    getList: async (resource, params) => {
+        const response = await dataProvider.getList(resource, params);
+        const data = response.json && response.json.results ? response.json.results : [];
+        const total = response.json && response.json.count !== undefined ? response.json.count : 0;
+        return {
+            data: data,
+            total: total
+        };
+    }
+};
 
 const App = () => (
-    <Admin history={history} dataProvider={dataProvider}>
-        <Resource name="customers" list={CustomersList} edit={CustomersEdit} create={CustomersCreate} />
-        <Resource name="parts" list={PartsList} edit={PartsEdit} create={PartsCreate} />
-        <Resource name="orders" list={OrdersList} edit={OrdersEdit} create={OrdersCreate} />
-        <Resource name="order_items" list={OrderItemsList} edit={OrderItemsEdit} create={OrderItemsCreate} />
-    </Admin>
+    <Router>
+        <Admin dataProvider={myDataProvider}>
+            <Resource name="customer" list={CustomerList} edit={CustomerEdit} create={CustomerCreate} />
+            <Resource name="part" list={PartList} edit={PartEdit} create={PartCreate} />
+            <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} />
+        </Admin>
+    </Router>
 );
 
 export default App;

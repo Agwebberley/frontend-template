@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm, TextInput, NumberInput, DateInput, Create, TabbedForm, FormTab, ReferenceInput, SelectInput, ArrayInput, SimpleFormIterator } from 'react-admin';
 
-export const PartsList = props => (
+export const PartList = props => (
     <List {...props}>
         <Datagrid>
             <TextField source="id" />
@@ -12,13 +12,13 @@ export const PartsList = props => (
 <TextField source="stock_quantity" />
 <TextField source="created_at" />
 <TextField source="updated_at" />
-            <EditButton basePath="/parts" />
-            <DeleteButton basePath="/parts" />
+            <EditButton basePath="/part" />
+            <DeleteButton basePath="/part" />
         </Datagrid>
     </List>
 );
 
-export const PartsEdit = props => (
+export const PartEdit = props => (
     <Edit {...props}>
         <TabbedForm>
             <FormTab label="Details">
@@ -35,7 +35,7 @@ export const PartsEdit = props => (
     </Edit>
 );
 
-export const PartsCreate = props => (
+export const PartCreate = props => (
     <Create {...props}>
         <SimpleForm>
             <TextInput source="id" disabled />
