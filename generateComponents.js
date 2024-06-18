@@ -64,6 +64,7 @@ const generateFormField = (field) => {
     if (field.editable === false) {
         return `<TextInput source="${field.name}" disabled />`;
     }
+    if (field.type === 'date') { return `<DateInput source="${field.name}" />` }
     return field.type === 'number'
         ? `<NumberInput source="${field.name}" />`
         : `<TextInput source="${field.name}" />`;

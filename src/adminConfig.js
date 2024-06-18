@@ -1,6 +1,7 @@
 import { CustomerList, CustomerEdit, CustomerCreate } from './components/customer';
 import { PartList, PartEdit, PartCreate } from './components/part';
-import { OrderList, OrderEdit, OrderCreate } from './components/order';
+import { OrderList, OrderEdit } from './components/order';
+import OrderCreate from './components/OrderCreate';
 import { fetchUtils, Admin, Resource } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -25,7 +26,7 @@ const httpClient = async (url, options = {}) => {
         url += '/';
     }
     options.headers = new Headers({ Accept: 'application/json' });
-    if (options.method === "POST") {
+    if (options.method === "POST" || options.method === "PUT") {
         options.headers.append('X-CSRFToken', getCookie('csrftoken'));
     }
     const response = await fetchUtils.fetchJson(url, options);
@@ -39,11 +40,20 @@ const myDataProvider = {
     ...dataProvider,
     getList: async (resource, params) => {
         const response = await dataProvider.getList(resource, params);
-        const data = response.json && response.json.results ? response.json.results : [];
-        const total = response.json && response.json.count !== undefined ? response.json.count : 0;
+        console.log(response.data.results);
+        //const data = response.json.results ? response.json.results : [];
+        const total = response.data.results.length > 0 ? response.data.results[0].total : 0;
+        console.log(total);
         return {
-            data: data,
+            data: response.data.results,
             total: total
+        };
+    },
+    getMany: async (resource, params) => {
+        const response = await dataProvider.getMany(resource, params);
+        console.log(response.data);
+        return {
+            data: response.data.results
         };
     }
 };
@@ -54,7 +64,7 @@ const App = () => (
             <Resource name="customer" list={CustomerList} edit={CustomerEdit} create={CustomerCreate} />
             <Resource name="part" list={PartList} edit={PartEdit} create={PartCreate} />
             <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} />
-        </Admin>
+                        </Admin>
     </Router>
 );
 
