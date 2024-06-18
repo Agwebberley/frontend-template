@@ -1,58 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const yaml = require('yaml');
 
-const resources = [
-    // Define your resources here
-    {
-        name: 'customer',
-        fields: [
-            { name: 'id', type: 'number', editable: false },
-            { name: 'name', type: 'string' },
-            { name: 'email', type: 'string' },
-            { name: 'phone', type: 'string' },
-            { name: 'created_at', type: 'date', editable: false },
-            { name: 'updated_at', type: 'date', editable: false }
-        ]
-    },
-    {
-        name: 'part',
-        fields: [
-            { name: 'id', type: 'number', editable: false },
-            { name: 'name', type: 'string' },
-            { name: 'description', type: 'string' },
-            { name: 'price', type: 'number' },
-            { name: 'stock_quantity', type: 'number' },
-            { name: 'created_at', type: 'date', editable: false },
-            { name: 'updated_at', type: 'date', editable: false }
-        ]
-    },
-    {
-        name: 'order',
-        fields: [
-            { name: 'id', type: 'number', editable: false },
-            { name: 'customer_id', type: 'reference', reference: 'customer' },
-            { name: 'order_date', type: 'date' },
-            { name: 'total_amount', type: 'number' },
-            { name: 'status', type: 'string' },
-            { name: 'created_at', type: 'date', editable: false },
-            { name: 'updated_at', type: 'date', editable: false }
-        ],
-        nested: [
-            {
-                name: 'order_item',
-                fields: [
-                    { name: 'id', type: 'number', editable: false },
-                    { name: 'order_id', type: 'reference', reference: 'order' },
-                    { name: 'part_id', type: 'reference', reference: 'part' },
-                    { name: 'quantity', type: 'number' },
-                    { name: 'unit_price', type: 'number' },
-                    { name: 'created_at', type: 'date', editable: false },
-                    { name: 'updated_at', type: 'date', editable: false }
-                ]
-            }
-        ]
-    },
-];
+// Load the YAML file
+const file = fs.readFileSync('resources.yaml', 'utf8');
+const { resources } = yaml.parse(file);
 
 const generateFormField = (field) => {
     if (field.type === 'reference') {
@@ -101,20 +53,23 @@ export const ${resource}List = props => (
 export const ${resource}Edit = props => (
     <Edit {...props}>
         <TabbedForm>
-            <FormTab label="Details">
+            <TabbedForm.Tab label="Details">
                 ${fields.map(generateFormField).join('\n')}
-            </FormTab>
-            ${nested ? nested.map(generateNestedFormField).join('\n') : ''}
+            </TabbedForm.Tab>
+            ${nested ? nested.map(nestedItem => `<TabbedForm.Tab label="${nestedItem.name}">${generateNestedFormField(nestedItem)}</TabbedForm.Tab>`).join('\n') : ''}
         </TabbedForm>
     </Edit>
 );
 
 export const ${resource}Create = props => (
     <Create {...props}>
-        <SimpleForm>
-            ${fields.map(generateFormField).join('\n')}
+        <TabbedForm>
+            <TabbedForm.Tab label="Details">
+                ${fields.map(generateFormField).join('\n')}
+            </TabbedForm.Tab>
             ${nested ? nested.map(generateNestedFormField).join('\n') : ''}
-        </SimpleForm>
+        </TabbedForm>
+        ${nested ? nested.map(nestedItem => `<TabbedForm.Tab label="${nestedItem.name}">${generateNestedFormField(nestedItem)}</TabbedForm.Tab>`).join('\n') : ''}
     </Create>
 );
 `;

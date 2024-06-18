@@ -33,15 +33,10 @@ export const OrderEdit = props => (
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
             </TabbedForm.Tab>
-        <TabbedForm.Tab label="Order Items">
-            
+            <TabbedForm.Tab label="order item">
     <ArrayInput source="order_item">
         <SimpleFormIterator>
             <TextInput source="id" disabled />
-
-        <ReferenceInput source="order_id" reference="order">
-            <SelectInput optionText="id" />
-        </ReferenceInput>
 
         <ReferenceInput source="part_id" reference="part">
             <SelectInput optionText="id" />
@@ -51,8 +46,7 @@ export const OrderEdit = props => (
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
         </SimpleFormIterator>
-    </ArrayInput>
-            </TabbedForm.Tab>
+    </ArrayInput></TabbedForm.Tab>
         </TabbedForm>
     </Edit>
 );
@@ -62,36 +56,31 @@ export const OrderCreate = props => (
         <TabbedForm>
             <TabbedForm.Tab label="Details">
                 <TextInput source="id" disabled />
+            
+        
 
-                <ReferenceInput source="customer_id" reference="customer">
-                    <SelectInput optionText="id" />
-                </ReferenceInput>
-
-                <DateInput source="order_date" />
-                <NumberInput source="total_amount" />
-                <TextInput source="status" />
-                <TextInput source="created_at" disabled />
-                <TextInput source="updated_at" disabled />
+        <ReferenceInput source="customer_id" reference="customer">
+            <SelectInput optionText="id" />
+        </ReferenceInput>
+<DateInput source="order_date" />
+<NumberInput source="total_amount" />
+<TextInput source="status" />
+<TextInput source="created_at" disabled />
+<TextInput source="updated_at" disabled />
             </TabbedForm.Tab>
-            <TabbedForm.Tab label="Order Items">
-                <ArrayInput source="order_item">
-                    <SimpleFormIterator>
-                        <TextInput source="id" disabled />
 
-                        <ReferenceInput source="order_id" reference="order">
-                            <SelectInput optionText="id" />
-                        </ReferenceInput>
-
-                        <ReferenceInput source="part_id" reference="part">
-                            <SelectInput optionText="id" />
-                        </ReferenceInput>
-                        <NumberInput source="quantity" />
-                        <NumberInput source="unit_price" />
-                        <TextInput source="created_at" disabled />
-                        <TextInput source="updated_at" disabled />
-                    </SimpleFormIterator>
-                </ArrayInput>
-            </TabbedForm.Tab>
-        </TabbedForm>
+        <TabbedForm.Tab label="order_item">
+    <ArrayInput source="order_item">
+        <SimpleFormIterator>
+            <TextInput source="id" disabled />
+        <ReferenceInput source="part_id" reference="part">
+            <SelectInput optionText="id" />
+        </ReferenceInput>
+<NumberInput source="quantity" />
+<NumberInput source="unit_price" />
+<TextInput source="created_at" disabled />
+<TextInput source="updated_at" disabled />
+        </SimpleFormIterator>
+    </ArrayInput></TabbedForm.Tab></TabbedForm>
     </Create>
 );

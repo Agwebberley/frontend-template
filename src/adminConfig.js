@@ -1,7 +1,6 @@
 import { CustomerList, CustomerEdit, CustomerCreate } from './components/customer';
 import { PartList, PartEdit, PartCreate } from './components/part';
-import { OrderList, OrderEdit } from './components/order';
-import OrderCreate from './components/OrderCreate';
+import { OrderList, OrderEdit, OrderCreate } from './components/order';
 import { fetchUtils, Admin, Resource } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 import { BrowserRouter as Router } from 'react-router-dom';

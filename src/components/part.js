@@ -21,7 +21,7 @@ export const PartList = props => (
 export const PartEdit = props => (
     <Edit {...props}>
         <TabbedForm>
-            <FormTab label="Details">
+            <TabbedForm.Tab label="Details">
                 <TextInput source="id" disabled />
 <TextInput source="name" />
 <TextInput source="description" />
@@ -29,7 +29,7 @@ export const PartEdit = props => (
 <NumberInput source="stock_quantity" />
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
-            </FormTab>
+            </TabbedForm.Tab>
             
         </TabbedForm>
     </Edit>
@@ -37,15 +37,18 @@ export const PartEdit = props => (
 
 export const PartCreate = props => (
     <Create {...props}>
-        <SimpleForm>
-            <TextInput source="id" disabled />
+        <TabbedForm>
+            <TabbedForm.Tab label="Details">
+                <TextInput source="id" disabled />
 <TextInput source="name" />
 <TextInput source="description" />
 <NumberInput source="price" />
 <NumberInput source="stock_quantity" />
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
+            </TabbedForm.Tab>
             
-        </SimpleForm>
+        </TabbedForm>
+        
     </Create>
 );

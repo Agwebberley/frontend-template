@@ -20,14 +20,14 @@ export const CustomerList = props => (
 export const CustomerEdit = props => (
     <Edit {...props}>
         <TabbedForm>
-            <FormTab label="Details">
+            <TabbedForm.Tab label="Details">
                 <TextInput source="id" disabled />
 <TextInput source="name" />
 <TextInput source="email" />
 <TextInput source="phone" />
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
-            </FormTab>
+            </TabbedForm.Tab>
             
         </TabbedForm>
     </Edit>
@@ -35,14 +35,17 @@ export const CustomerEdit = props => (
 
 export const CustomerCreate = props => (
     <Create {...props}>
-        <SimpleForm>
-            <TextInput source="id" disabled />
+        <TabbedForm>
+            <TabbedForm.Tab label="Details">
+                <TextInput source="id" disabled />
 <TextInput source="name" />
 <TextInput source="email" />
 <TextInput source="phone" />
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
+            </TabbedForm.Tab>
             
-        </SimpleForm>
+        </TabbedForm>
+        
     </Create>
 );
