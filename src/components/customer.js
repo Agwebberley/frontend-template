@@ -11,8 +11,8 @@ export const CustomerList = props => (
 <TextField source="phone" />
 <TextField source="created_at" />
 <TextField source="updated_at" />
-            <EditButton basePath="/customer" />
-            <DeleteButton basePath="/customer" />
+            <EditButton />
+            <DeleteButton  />
         </Datagrid>
     </List>
 );

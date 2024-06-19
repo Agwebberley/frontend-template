@@ -12,8 +12,8 @@ export const PartList = props => (
 <TextField source="stock_quantity" />
 <TextField source="created_at" />
 <TextField source="updated_at" />
-            <EditButton basePath="/part" />
-            <DeleteButton basePath="/part" />
+            <EditButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );

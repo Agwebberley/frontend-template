@@ -1,7 +1,7 @@
 import { CustomerList, CustomerEdit, CustomerCreate } from './components/customer';
 import { PartList, PartEdit, PartCreate } from './components/part';
-import { OrderList, OrderEdit, OrderCreate } from './components/order';
-import { fetchUtils, Admin, Resource } from 'react-admin';
+import { OrderList, OrderEdit, OrderCreate, OrderShow } from './components/order';
+import { fetchUtils, Admin, Resource, ShowGuesser } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 import { BrowserRouter as Router } from 'react-router-dom';
 import authProvider from './authProvider';
@@ -32,7 +32,6 @@ const httpClient = async (url, options = {}) => {
 
     // Auth
     const token = localStorage.getItem('token');
-    console.log(token);
     options.headers.set('Authorization', `Bearer ${token}`);
 
     const response = await fetchUtils.fetchJson(url, options);
@@ -46,10 +45,9 @@ const myDataProvider = {
     ...dataProvider,
     getList: async (resource, params) => {
         const response = await dataProvider.getList(resource, params);
-        console.log(response.data);
+
         //const data = response.json.results ? response.json.results : [];
         const total = response.data.results.length > 0 ? response.data.results[0].total : 0;
-        console.log(total);
         return {
             data: response.data.results,
             total: total
@@ -57,7 +55,6 @@ const myDataProvider = {
     },
     getMany: async (resource, params) => {
         const response = await dataProvider.getMany(resource, params);
-        console.log(response.data);
         return {
             data: response.data.results
         };
@@ -69,8 +66,8 @@ const App = () => (
         <Admin authProvider={authProvider} dataProvider={myDataProvider}>
             <Resource name="customer" list={CustomerList} edit={CustomerEdit} create={CustomerCreate} />
             <Resource name="part" list={PartList} edit={PartEdit} create={PartCreate} />
-            <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} />
-                        </Admin>
+            <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} show={OrderShow} />
+        </Admin>
     </Router>
 );
 

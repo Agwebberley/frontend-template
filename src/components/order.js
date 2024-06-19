@@ -1,10 +1,11 @@
 
 import * as React from 'react';
 import { List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm, TextInput, NumberInput, DateInput, Create, TabbedForm, FormTab, ReferenceInput, SelectInput, ArrayInput, SimpleFormIterator } from 'react-admin';
+import { Show, SimpleShowLayout, ShowButton, ReferenceField, NumberField, ArrayField, DateField } from 'react-admin';
 
 export const OrderList = props => (
     <List {...props}>
-        <Datagrid>
+        <Datagrid expand={<OrderShow />}>
             <TextField source="id" />
 <TextField source="customer_id" reference="customer" />
 <TextField source="order_date" />
@@ -12,10 +13,38 @@ export const OrderList = props => (
 <TextField source="status" />
 <TextField source="created_at" />
 <TextField source="updated_at" />
-            <EditButton basePath="/order" />
-            <DeleteButton basePath="/order" />
+            <EditButton  />
+            <DeleteButton  />
+            <ShowButton />
         </Datagrid>
     </List>
+);
+
+export const OrderShow = props => (
+    <Show {...props}>
+        <SimpleShowLayout>
+            <TextField source="id" />
+            <ReferenceField source="customer_id" reference="customer">
+                <TextField source="name" />
+            </ReferenceField>
+            <TextField source="order_date" />
+            <TextField source="status" />
+            <TextField source="created_at" />
+            <TextField source="updated_at" />
+            
+            <h3>Order Items</h3>
+            <ArrayField source="order_item"><Datagrid><TextField source="id" />
+            <TextField source="total" />
+            <NumberField source="quantity" />
+            <DateField source="created_at" />
+            <DateField source="updated_at" />
+            <ReferenceField source="part_id" reference="part" >
+            <TextField source="name" reference="part" />
+            </ReferenceField>
+            </Datagrid></ArrayField>
+
+        </SimpleShowLayout>
+    </Show>
 );
 
 export const OrderEdit = props => (

@@ -34,6 +34,7 @@ const generateNestedFormField = (nested) => {
 const componentTemplate = (resource, fields, nested) => `
 import * as React from 'react';
 import { List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm, TextInput, NumberInput, DateInput, Create, TabbedForm, FormTab, ReferenceInput, SelectInput, ArrayInput, SimpleFormIterator } from 'react-admin';
+import { Show, SimpleShowLayout, ShowButton, ReferenceField, NumberField, ArrayField, DateField } from 'react-admin';
 
 export const ${resource}List = props => (
     <List {...props}>
@@ -44,10 +45,42 @@ export const ${resource}List = props => (
                 }
                 return `<TextField source="${field.name}" />`;
             }).join('\n')}
-            <EditButton basePath="/${resource.toLowerCase()}" />
-            <DeleteButton basePath="/${resource.toLowerCase()}" />
+            <EditButton />
+            <DeleteButton />
+            <ShowButton />
         </Datagrid>
     </List>
+);
+
+export const ${resource}Show = props => (
+    <Show {...props}>
+        <SimpleShowLayout>
+            ${fields.map(field => {
+                if (field.type === 'reference') {
+                    return `<ReferenceField source="${field.name}" reference="${field.reference}">
+                        <TextField source="id" />
+                    </ReferenceField>`;
+                }
+                return `<TextField source="${field.name}" />`;
+            }
+            ).join('\n')}
+            ${nested ? nested.map(nestedItem => `
+            <h3>${nestedItem.name}</h3>
+            <ArrayField source="${nestedItem.name}">
+                <Datagrid>
+                    ${nestedItem.fields.map(field => {
+                        if (field.type === 'reference') {
+                            return `<ReferenceField source="${field.name}" reference="${field.reference}">
+                                <TextField source="id" />
+                            </ReferenceField>`;
+                        }
+                        return `<TextField source="${field.name}" />`;
+                    }
+                    ).join('\n')}
+                </Datagrid>
+            </ArrayField>`).join('\n') : ''}
+        </SimpleShowLayout>
+    </Show>
 );
 
 export const ${resource}Edit = props => (
