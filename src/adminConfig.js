@@ -46,7 +46,7 @@ const myDataProvider = {
     ...dataProvider,
     getList: async (resource, params) => {
         const response = await dataProvider.getList(resource, params);
-        console.log(response.data.results);
+        console.log(response.data);
         //const data = response.json.results ? response.json.results : [];
         const total = response.data.results.length > 0 ? response.data.results[0].total : 0;
         console.log(total);

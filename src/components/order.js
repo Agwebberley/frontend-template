@@ -8,7 +8,7 @@ export const OrderList = props => (
             <TextField source="id" />
 <TextField source="customer_id" reference="customer" />
 <TextField source="order_date" />
-<TextField source="total_amount" />
+<TextField source="total" />
 <TextField source="status" />
 <TextField source="created_at" />
 <TextField source="updated_at" />
@@ -28,7 +28,6 @@ export const OrderEdit = props => (
             <SelectInput optionText="id" />
         </ReferenceInput>
 <DateInput source="order_date" />
-<NumberInput source="total_amount" />
 <TextInput source="status" />
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
@@ -42,7 +41,6 @@ export const OrderEdit = props => (
             <SelectInput optionText="id" />
         </ReferenceInput>
 <NumberInput source="quantity" />
-<NumberInput source="unit_price" />
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
         </SimpleFormIterator>
@@ -63,7 +61,6 @@ export const OrderCreate = props => (
             <SelectInput optionText="id" />
         </ReferenceInput>
 <DateInput source="order_date" />
-<NumberInput source="total_amount" />
 <TextInput source="status" />
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
@@ -77,7 +74,6 @@ export const OrderCreate = props => (
             <SelectInput optionText="id" />
         </ReferenceInput>
 <NumberInput source="quantity" />
-<NumberInput source="unit_price" />
 <TextInput source="created_at" disabled />
 <TextInput source="updated_at" disabled />
         </SimpleFormIterator>
