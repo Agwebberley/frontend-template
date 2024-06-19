@@ -4,6 +4,7 @@ import { OrderList, OrderEdit, OrderCreate } from './components/order';
 import { fetchUtils, Admin, Resource } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 import { BrowserRouter as Router } from 'react-router-dom';
+import authProvider from './authProvider';
 
 const getCookie = (name) => {
     let cookieValue = null;
@@ -28,6 +29,12 @@ const httpClient = async (url, options = {}) => {
     if (options.method === "POST" || options.method === "PUT") {
         options.headers.append('X-CSRFToken', getCookie('csrftoken'));
     }
+
+    // Auth
+    const token = localStorage.getItem('token');
+    console.log(token);
+    options.headers.set('Authorization', `Bearer ${token}`);
+
     const response = await fetchUtils.fetchJson(url, options);
     const { headers, json } = response;
     return { headers, json };
@@ -59,7 +66,7 @@ const myDataProvider = {
 
 const App = () => (
     <Router>
-        <Admin dataProvider={myDataProvider}>
+        <Admin authProvider={authProvider} dataProvider={myDataProvider}>
             <Resource name="customer" list={CustomerList} edit={CustomerEdit} create={CustomerCreate} />
             <Resource name="part" list={PartList} edit={PartEdit} create={PartCreate} />
             <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} />

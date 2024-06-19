@@ -61,9 +61,6 @@ resources:
           - name: id
             type: number
             editable: false
-          - name: order_id
-            type: reference
-            reference: order
           - name: part_id
             type: reference
             reference: part
