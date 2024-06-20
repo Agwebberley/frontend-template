@@ -1,10 +1,13 @@
 import { CustomerList, CustomerEdit, CustomerCreate } from './components/customer';
 import { PartList, PartEdit, PartCreate } from './components/part';
 import { OrderList, OrderEdit, OrderCreate, OrderShow } from './components/order';
-import { fetchUtils, Admin, Resource, ShowGuesser } from 'react-admin';
+import { MainLayout } from './components/layout';
+import { fetchUtils, Admin, Resource} from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 import { BrowserRouter as Router } from 'react-router-dom';
 import authProvider from './authProvider';
+import Dashboard from './components/dashboard';
+
 
 const getCookie = (name) => {
     let cookieValue = null;
@@ -61,14 +64,21 @@ const myDataProvider = {
     }
 };
 
-const App = () => (
-    <Router>
-        <Admin authProvider={authProvider} dataProvider={myDataProvider}>
-            <Resource name="customer" list={CustomerList} edit={CustomerEdit} create={CustomerCreate} />
-            <Resource name="part" list={PartList} edit={PartEdit} create={PartCreate} />
-            <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} show={OrderShow} />
-        </Admin>
-    </Router>
-);
+const App = () => {
+    return (
+        <Router>
+            <Admin authProvider={authProvider} 
+            dataProvider={myDataProvider}
+            layout={MainLayout} 
+            darkTheme={{ palette: { mode: 'dark' } }}
+            dashboard={Dashboard}
+            >
+                <Resource name="customer" list={CustomerList} edit={CustomerEdit} create={CustomerCreate} />
+                <Resource name="part" list={PartList} edit={PartEdit} create={PartCreate} />
+                <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} show={OrderShow} />
+            </Admin>
+        </Router>
+    );
+};
 
 export default App;

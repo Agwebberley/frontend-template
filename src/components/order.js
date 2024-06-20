@@ -1,22 +1,44 @@
 
 import * as React from 'react';
-import { List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm, TextInput, NumberInput, DateInput, Create, TabbedForm, FormTab, ReferenceInput, SelectInput, ArrayInput, SimpleFormIterator } from 'react-admin';
+import { List, Datagrid, SearchInput, TextField, EditButton, DeleteButton, Edit, SimpleForm, TextInput, NumberInput, DateInput, Create, TabbedForm, FormTab, ReferenceInput, SelectInput, ArrayInput, SimpleFormIterator, WrapperField } from 'react-admin';
 import { Show, SimpleShowLayout, ShowButton, ReferenceField, NumberField, ArrayField, DateField } from 'react-admin';
+import { Stack } from '@mui/material';
+import {
+    DatagridConfigurable,
+    SelectColumnsButton,
+    TopToolbar,
+} from "react-admin";
+
+const OrderFilter = (props) => (
+    <Stack>
+        <SearchInput source="q" alwaysOn />
+    </Stack>
+);
+
+const OrderActions = (props) => (
+    <TopToolbar>
+        <SelectColumnsButton {...props} />
+    </TopToolbar>
+);
 
 export const OrderList = props => (
-    <List {...props}>
-        <Datagrid expand={<OrderShow />}>
+    <List {...props} actions={<OrderActions />} >
+        <DatagridConfigurable expand={<OrderShow />}>
             <TextField source="id" />
-<TextField source="customer_id" reference="customer" />
-<TextField source="order_date" />
-<TextField source="total" />
-<TextField source="status" />
-<TextField source="created_at" />
-<TextField source="updated_at" />
-            <EditButton  />
-            <DeleteButton  />
-            <ShowButton />
-        </Datagrid>
+            <ReferenceField source='customer_id' reference="customer">
+                <TextField source='name'/>
+            </ReferenceField>
+            <TextField source="order_date" />
+            <TextField source="total" />
+            <TextField source="status" />
+            <TextField source="created_at" />
+            <TextField source="updated_at" />
+            <WrapperField label='Actions'>
+                <EditButton />
+                <DeleteButton />
+                <ShowButton />
+            </WrapperField>
+        </DatagridConfigurable>
     </List>
 );
 
