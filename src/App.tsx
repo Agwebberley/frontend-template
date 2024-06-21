@@ -4,7 +4,7 @@ import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
   ErrorComponent,
-  notificationProvider,
+  useNotificationProvider,
   RefineSnackbarProvider,
   ThemedLayoutV2,
 } from "@refinedev/mui";
@@ -50,8 +50,8 @@ function App() {
           <RefineSnackbarProvider>
             <DevtoolsProvider>
               <Refine
-                dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
-                notificationProvider={notificationProvider}
+                dataProvider={dataProvider("127.0.0.1:8000/api/")}
+                notificationProvider={useNotificationProvider}
                 authProvider={authProvider}
                 routerProvider={routerBindings}
                 resources={[

@@ -1,59 +1,45 @@
-import type { AuthProvider } from "@refinedev/core";
+// authProvider.ts
+import axios from "axios";
+import { AuthProvider } from "@refinedev/core";
+import { AuthActionResponse, CheckResponse } from "@refinedev/core/dist/contexts/auth/types";
 
-export const TOKEN_KEY = "refine-auth";
+interface LoginParams {
+    username: string;
+    password: string;
+}
 
 export const authProvider: AuthProvider = {
-  login: async ({ username, email, password }) => {
-    if ((username || email) && password) {
-      localStorage.setItem(TOKEN_KEY, username);
-      return {
-        success: true,
-        redirectTo: "/",
-      };
-    }
-
-    return {
-      success: false,
-      error: {
-        name: "LoginError",
-        message: "Invalid username or password",
-      },
-    };
-  },
-  logout: async () => {
-    localStorage.removeItem(TOKEN_KEY);
-    return {
-      success: true,
-      redirectTo: "/login",
-    };
-  },
-  check: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      return {
-        authenticated: true,
-      };
-    }
-
-    return {
-      authenticated: false,
-      redirectTo: "/login",
-    };
-  },
-  getPermissions: async () => null,
-  getIdentity: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      return {
-        id: 1,
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/300",
-      };
-    }
-    return null;
-  },
-  onError: async (error) => {
-    console.error(error);
-    return { error };
-  },
+    login: async ({ username, password }: LoginParams): Promise<AuthActionResponse> => {
+        try {
+            const response = await axios.post('http://localhost:8000/api/token/', { username, password });
+            const { access, refresh } = response.data;
+            localStorage.setItem('token', access);
+            localStorage.setItem('refreshToken', refresh);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+            return Promise.resolve({ success: true });
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    },
+    logout: (): Promise<AuthActionResponse> => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        delete axios.defaults.headers.common['Authorization'];
+        return Promise.resolve({ success: true });
+    },
+    check: (): Promise<CheckResponse> => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            return Promise.resolve({ authenticated: true });
+        }
+        return Promise.reject({ authenticated: false });
+    },
+    onError: (error: any): Promise<CheckResponse> => {
+        if (error.response?.status === 401) {
+            return Promise.resolve({ authenticated: false });
+        }
+        return Promise.reject(error);
+    },
+    getPermissions: (): Promise<any> => Promise.resolve(),
 };
